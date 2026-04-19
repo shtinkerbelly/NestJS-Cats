@@ -8,10 +8,12 @@ import {
   Delete,
   ValidationPipe,
   UsePipes,
+  Query,
 } from '@nestjs/common';
 import { CatsService } from './cats.service';
 import { CreateCatDto } from './dto/create-cat.dto';
 import { UpdateCatDto } from './dto/update-cat.dto';
+import { SearchCatDto } from './dto/search-cat.dto';
 
 @Controller('cats')
 export class CatsController {
@@ -26,6 +28,12 @@ export class CatsController {
   @Get()
   findAll() {
     return this.catsService.findAll();
+  }
+
+  @Get('search')
+  @UsePipes(new ValidationPipe({ transform: true }))
+  search(@Query() query: SearchCatDto) {
+    return this.catsService.search(query);
   }
 
   @Get(':id')

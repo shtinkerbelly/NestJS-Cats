@@ -3,36 +3,34 @@ import { CreateCatDto } from './dto/create-cat.dto';
 import { UpdateCatDto } from './dto/update-cat.dto';
 import { Cat } from './entities/cat.entity';
 import { v4 as uuid } from 'uuid';
+import { CatsRepository } from './cat.repository';
 
 @Injectable()
 export class CatsService {
-  private readonly cats: Cat[] = [];
+  constructor(private readonly catsRepository: CatsRepository) {}
 
   create(createCatDto: CreateCatDto) {
-    console.log(createCatDto);
     const newCat: Cat = {
       id: uuid(),
       ...createCatDto,
     };
-    this.cats.push(newCat);
-    return newCat;
+
+    return this.catsRepository.add(newCat);
   }
 
   findAll() {
-    return this.cats;
+    return this.catsRepository.findAll();
   }
 
-  findOne(id: string) {
-    return this.cats.find((cat) => cat.id === id);
+  findById(id: string) {
+    return this.catsRepository.findById(id);
   }
 
   update(id: string, updateCatDto: UpdateCatDto) {
-    return this.cats.map((cat) =>
-      cat.id === id ? { ...cat, ...updateCatDto } : cat,
-    );
+    return this.catsRepository.update(id, updateCatDto);
   }
 
   remove(id: string) {
-    return this.cats.filter((cat) => cat.id !== id);
+    return this.catsRepository.remove(id);
   }
 }

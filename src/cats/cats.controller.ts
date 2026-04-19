@@ -30,7 +30,7 @@ export class CatsController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.catsService.findOne(id);
+    return this.catsService.findById(id);
   }
 
   @Patch(':id')

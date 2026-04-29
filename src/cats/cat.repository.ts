@@ -1,10 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Cat } from './entities/cat.entity';
 import { UpdateCatDto } from './dto/update-cat.dto';
 
 @Injectable()
 export class CatsRepository {
-  private readonly cats: Cat[] = [];
+  private cats: Cat[] = [];
 
   findAll() {
     return this.cats;
@@ -24,9 +24,20 @@ export class CatsRepository {
   }
 
   update(id: string, updateCatDto: UpdateCatDto) {
-    return this.cats.map((cat) =>
-      cat.id === id ? { ...cat, ...updateCatDto } : cat,
-    );
+    const catIndex = this.cats.findIndex((cat) => cat.id === id);
+
+    if (catIndex === -1) {
+      throw new NotFoundException(`Entity with ID ${id} not found`);
+    }
+
+    const updatedCat = {
+      ...this.cats[catIndex],
+      ...updateCatDto,
+    };
+
+    this.cats[catIndex] = updatedCat;
+
+    return updatedCat;
   }
 
   remove(id: string) {

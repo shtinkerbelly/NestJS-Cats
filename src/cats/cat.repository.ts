@@ -27,7 +27,7 @@ export class CatsRepository {
     const catIndex = this.cats.findIndex((cat) => cat.id === id);
 
     if (catIndex === -1) {
-      throw new NotFoundException(`Entity with ID ${id} not found`);
+      throw new NotFoundException(`Cat with ID ${id} not found`);
     }
 
     const updatedCat = {
@@ -36,7 +36,6 @@ export class CatsRepository {
     };
 
     this.cats[catIndex] = updatedCat;
-
     return updatedCat;
   }
 
